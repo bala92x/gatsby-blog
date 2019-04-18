@@ -13,7 +13,10 @@ const BlogPage = () => {
                             title,
                             date
                         }
-                        excerpt
+                        excerpt,
+                        fields {
+                            slug
+                        }
                     }
                 }
             }
