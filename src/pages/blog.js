@@ -1,5 +1,5 @@
 import React from 'react'
-import { graphql, useStaticQuery } from 'gatsby'
+import { graphql, useStaticQuery, Link } from 'gatsby'
 
 import Layout from '../components/layout'
 
@@ -33,9 +33,11 @@ const BlogPage = () => {
 
                     return (
                         <li key={post.frontmatter.title}>
-                            <h2>{post.frontmatter.title}</h2>
-                            <p>{post.frontmatter.date}</p>
-                            <p>{post.excerpt}</p>
+                            <Link to={`/blog/${post.fields.slug}`}>
+                                <h2>{post.frontmatter.title}</h2>
+                                <p>{post.frontmatter.date}</p>
+                                <p>{post.excerpt}</p>
+                            </Link>
                         </li>
                     )
                 })}
