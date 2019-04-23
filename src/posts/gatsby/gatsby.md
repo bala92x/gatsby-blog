@@ -5,6 +5,8 @@ date: "2019-04-16"
 
 I just created a new blog post!
 
+![Grass](./grass.png)
+
 ## More post ideas
 
 1. React
