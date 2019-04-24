@@ -1,5 +1,6 @@
 import React from 'react'
-import { Link, graphql, useStaticQuery } from 'gatsby'
+import { Link, navigate, graphql, useStaticQuery } from 'gatsby'
+import { getUser, isLoggedIn, logout } from "../services/auth"
 
 import headerStyles from './header.module.scss'
 
@@ -13,6 +14,14 @@ const Header = () => {
             }
         }
     `)
+    const content = { message: "", login: true }
+
+    if (isLoggedIn()) {
+        content.message = `Hello, ${getUser().name}`
+    } else {
+        content.message = "You are not logged in"
+    }
+
     return (
         <header className={headerStyles.header}>
             <h1>
@@ -58,7 +67,30 @@ const Header = () => {
                             Contact
                         </Link>
                     </li>
+                    <li>
+                        <Link
+                            activeClassName={headerStyles.activeNavItem}
+                            className={headerStyles.navItem}
+                            to="/user/profile"
+                        >
+                            Profile
+                        </Link>
+                    </li>
+                    {isLoggedIn() && (
+                        <li>
+                            <a
+                                href="/"
+                                onClick={(event) => {
+                                    event.preventDefault()
+                                    logout(() => navigate(`/user/login`))
+                                }}
+                            >
+                                Logout
+                            </a>
+                        </li>
+                    )}
                 </ul>
+                <span>{content.message}</span>
             </nav>
         </header>
     )
