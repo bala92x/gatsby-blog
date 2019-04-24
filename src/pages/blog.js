@@ -5,7 +5,7 @@ import Layout from '../components/layout'
 import blogStyles from './blog.module.scss'
 
 const BlogPage = () => {
-    const data = useStaticQuery(graphql`
+    /* const markdownDdata = useStaticQuery(graphql`
         query {
             allMarkdownRemark {
                 edges {
@@ -22,9 +22,28 @@ const BlogPage = () => {
                 }
             }
         }
+    `) */
+
+    const contentfulData = useStaticQuery(graphql`
+        query {
+            allContentfulBlogPost (
+                sort: {
+                    fields: publishedDate,
+                    order: DESC
+                }
+            ) {
+                edges {
+                    node {
+                        title,
+                        slug,
+                        publishedDate(fromNow:true)
+                    }
+                }
+            }
+        }
     `)
 
-    const posts = data.allMarkdownRemark.edges
+    const posts = contentfulData.allContentfulBlogPost.edges
     
     const renderPosts = (posts) => {
         return (
@@ -35,12 +54,11 @@ const BlogPage = () => {
                     return (
                         <li
                             className={blogStyles.post}
-                            key={post.frontmatter.title}
+                            key={post.title}
                         >
-                            <Link to={`/blog/${post.fields.slug}`}>
-                                <h2>{post.frontmatter.title}</h2>
-                                <p>{post.frontmatter.date}</p>
-                                <p>{post.excerpt}</p>
+                            <Link to={`/blog/${post.slug}`}>
+                                <h2>{post.title}</h2>
+                                <p>{post.publishedDate}</p>
                             </Link>
                         </li>
                     )
