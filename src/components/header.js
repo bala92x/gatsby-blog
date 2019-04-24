@@ -1,10 +1,12 @@
 import React from 'react'
-import { Link, navigate, graphql, useStaticQuery } from 'gatsby'
-import { getUser, isLoggedIn, logout } from "../services/auth"
+import { Link, graphql, useStaticQuery } from 'gatsby'
+import Auth from "../services/auth"
 
 import headerStyles from './header.module.scss'
 
 const Header = () => {
+    const auth = new Auth()
+    const { isAuthenticated } = auth
     const data = useStaticQuery(graphql`
         query {
             site {
@@ -16,8 +18,8 @@ const Header = () => {
     `)
     const content = { message: "", login: true }
 
-    if (isLoggedIn()) {
-        content.message = `Hello, ${getUser().name}`
+    if (isAuthenticated()) {
+        content.message = `Hello, ${auth.getUser().name}`
     } else {
         content.message = "You are not logged in"
     }
@@ -76,18 +78,15 @@ const Header = () => {
                             Profile
                         </Link>
                     </li>
-                    {isLoggedIn() && (
-                        <li>
-                            <a
-                                href="/"
-                                onClick={(event) => {
-                                    event.preventDefault()
-                                    logout(() => navigate(`/user/login`))
-                                }}
-                            >
-                                Logout
-                            </a>
-                        </li>
+                    {isAuthenticated() ? (
+                        <button onClick={auth.logout}>
+                            Logout
+                        </button>
+                    )
+                    : (
+                        <button onClick={auth.login}>
+                            Login
+                        </button>
                     )}
                 </ul>
                 <span>{content.message}</span>
