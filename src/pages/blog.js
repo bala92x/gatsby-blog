@@ -1,6 +1,7 @@
 import React from 'react'
 import { graphql, useStaticQuery, Link } from 'gatsby'
 
+import Head from '../components/head'
 import Layout from '../components/layout'
 import blogStyles from './blog.module.scss'
 
@@ -68,12 +69,11 @@ const BlogPage = () => {
     }
 
     return (
-        <div>
-            <Layout>
-                <h1>Blog</h1>
-                {posts.length === 0 ? 'No posts to show.' : renderPosts(posts)}
-            </Layout>
-        </div>
+        <Layout>
+            <Head title="Blog" />
+            <h1>Blog</h1>
+            {posts.length === 0 ? 'No posts to show.' : renderPosts(posts)}
+        </Layout>
     )
 }
 

@@ -2,6 +2,7 @@ import React from 'react'
 import { graphql } from 'gatsby'
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer' 
 
+import Head from '../components/head'
 import Layout from '../components/layout'
 
 /* export const markdownQquery = graphql`
@@ -73,6 +74,7 @@ const Post = (props) => {
     
     return (
         <Layout>
+            <Head title={post.title} />
             <h1>{post.title}</h1>
             <p>{post.publishedDate}</p>
             {documentToReactComponents(post.body.json, options)}
