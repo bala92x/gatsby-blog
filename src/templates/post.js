@@ -24,7 +24,18 @@ import Layout from '../components/layout'
             html
         }
     }
-` */
+` 
+const Post = (props) => {
+    const post = props.data.contentfulBlogPost
+
+    return (
+        <Layout>
+            <h1>{post.title}</h1>
+            <p>{post.publishedDate}</p>
+            <div dangerouslySetInnerHTML={{ __html: post.body.json }}></div>
+        </Layout>
+    )
+}*/
 
 export const contentfulQquery = graphql`
     query (
@@ -48,12 +59,23 @@ export const contentfulQquery = graphql`
 
 const Post = (props) => {
     const post = props.data.contentfulBlogPost
+    const options = {
+        renderNode: {
+            'embedded-asset-block': (node) => {
+                const image = node.data.target.fields
+                const alt = image.title['en-US']
+                const url = image.file['en-US'].url
+
+                return <img alt={alt} src={url} />
+            }
+        }
+    }
     
     return (
         <Layout>
             <h1>{post.title}</h1>
             <p>{post.publishedDate}</p>
-            {documentToReactComponents(post.body.json)}
+            {documentToReactComponents(post.body.json, options)}
         </Layout>
     )
 }
