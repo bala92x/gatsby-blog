@@ -1,6 +1,6 @@
 const path = require('path')
 
-module.exports.onCreateNode = ({ node, actions }) => {
+/* module.exports.onCreateNode = ({ node, actions }) => {
     const { createNodeField } = actions
 
     if (node.internal.type === 'MarkdownRemark') {
@@ -12,9 +12,9 @@ module.exports.onCreateNode = ({ node, actions }) => {
             value: slug
         })
     }
-}
+} */
 
-module.exports.createPages = async ({ graphql, actions }) => {
+/* module.exports.createPages = async ({ graphql, actions }) => {
     const { createPage } = actions
     const postTemplate = path.resolve('./src/templates/post.js')
     const response = await graphql(`
@@ -38,6 +38,33 @@ module.exports.createPages = async ({ graphql, actions }) => {
             path: `/blog/${edge.node.fields.slug}`,
             context: {
                 slug: edge.node.fields.slug
+            }
+        })
+    })
+} */
+
+module.exports.createPages = async ({ graphql, actions }) => {
+    const { createPage } = actions
+    const postTemplate = path.resolve('./src/templates/post.js')
+    const response = await graphql(`
+        query {
+            allContentfulBlogPost {
+                edges {
+                    node {
+                        slug
+                    }
+                }
+            }
+        }
+    `)
+    const edges = response.data.allContentfulBlogPost.edges
+
+    edges.forEach((edge) => {
+        createPage({
+            component: postTemplate,
+            path: `/blog/${edge.node.slug}`,
+            context: {
+                slug: edge.node.slug
             }
         })
     })
